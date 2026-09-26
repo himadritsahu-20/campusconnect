@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Connect | Student Events</title>
+  <style>
+    :root{
+      --navy:#102a43; --blue:#1d5fa7; --sky:#eaf4ff; --gold:#f5b940; --ink:#172b4d;
+      --muted:#61758a; --line:#dce6ef; --bg:#f5f8fc; --white:#fff; --green:#1b8a5a;
+      --red:#c93845; --shadow:0 10px 28px rgba(23,43,77,.10); --radius:14px;
+    }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+    button,input,select,textarea{font:inherit} button{cursor:pointer} a{color:inherit;text-decoration:none}
+    .nav{height:70px;background:#fff;display:flex;align-items:center;padding:0 max(22px,calc((100vw - 1220px)/2));gap:28px;border-bottom:1px solid #e4ebf2;position:sticky;top:0;z-index:20}
+    .brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;color:var(--navy);white-space:nowrap}.brand-mark{width:34px;height:34px;background:var(--blue);color:#fff;border-radius:9px;display:grid;place-items:center;font-size:20px;font-weight:900}
+    .navlinks{display:flex;align-items:stretch;gap:22px;height:70px;flex:1}.navlinks button{border:0;background:transparent;color:#53677d;font-weight:650;padding:0 2px;border-bottom:3px solid transparent}.navlinks button.active{color:var(--blue);border-color:var(--blue)}
+    .user-select{border:1px solid var(--line);padding:9px 32px 9px 12px;border-radius:8px;color:var(--ink);background:#fff;font-size:14px;max-width:210px}
+    main{max-width:1220px;margin:auto;padding:32px 22px 60px}.page{display:none}.page.active{display:block}
+    .hero{background:linear-gradient(112deg,#123562 0%,#1d5fa7 67%,#347fc3);border-radius:18px;padding:42px 46px;color:#fff;position:relative;overflow:hidden;margin-bottom:28px}.hero:after{content:"";position:absolute;width:290px;height:290px;border:42px solid rgba(255,255,255,.09);border-radius:50%;right:-58px;top:-122px}.hero h1{font-size:34px;margin:0 0 9px;letter-spacing:-.8px}.hero p{font-size:16px;opacity:.88;margin:0}.hero .btn{margin-top:22px}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:18px;margin:24px 0 16px}.section-head h2{font-size:24px;margin:0;letter-spacing:-.4px}.section-head p{margin:5px 0 0;color:var(--muted);font-size:14px}
+    .filters{padding:17px;background:#fff;border:1px solid var(--line);border-radius:12px;display:grid;grid-template-columns:1.8fr 1fr 1fr auto;gap:12px;margin-bottom:20px}.input,.select,textarea{width:100%;background:#fff;border:1px solid #cbd9e6;border-radius:8px;padding:10px 12px;color:var(--ink);outline:none}.input:focus,.select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #dcecff}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 3px 8px rgba(25,57,90,.03);transition:.2s}.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.card.cancelled{opacity:.7}.card-top{height:88px;padding:16px 17px;display:flex;justify-content:space-between;color:#fff;background:linear-gradient(135deg,#1f6ab0,#174278)}.card-top.art{background:linear-gradient(135deg,#b84d72,#6c3b77)}.card-top.tech{background:linear-gradient(135deg,#3e7d85,#174e62)}.card-top.sport{background:linear-gradient(135deg,#ce8a32,#a6412f)}.datebox{line-height:1;text-align:center;font-weight:800;text-transform:uppercase;font-size:11px;background:#fff;color:var(--blue);padding:9px 10px;border-radius:8px;height:max-content}.datebox strong{display:block;font-size:22px;margin:2px 0;color:var(--navy)}.tag{height:max-content;font-size:11px;background:rgba(255,255,255,.20);padding:5px 8px;border-radius:20px;font-weight:700}.card-body{padding:18px}.card h3{font-size:17px;margin:0 0 8px;line-height:1.3}.org{font-size:13px;color:var(--blue);font-weight:700;margin-bottom:13px}.info{font-size:13px;color:#607287;display:grid;gap:7px}.card-bottom{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #edf1f5;margin-top:16px;padding-top:14px}.seats{font-size:12px;color:var(--muted)}.seats.low{color:#b26810;font-weight:700}
+    .btn{border:0;border-radius:8px;padding:10px 15px;font-weight:750;font-size:14px;transition:.15s;display:inline-flex;align-items:center;justify-content:center;gap:7px}.btn:hover{filter:brightness(.96)}.primary{background:var(--blue);color:#fff}.secondary{background:#e8f2fc;color:var(--blue)}.danger{background:#fff0f1;color:var(--red)}.outline{border:1px solid #bdd0e3;background:#fff;color:var(--blue)}.small{padding:7px 10px;font-size:12px}.wide{width:100%}.hidden{display:none!important}
+    .empty{background:#fff;border:1px dashed #b9cadb;padding:52px 20px;text-align:center;border-radius:14px;color:var(--muted);grid-column:1/-1}.empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:7px}
+    .tabs{border-bottom:1px solid var(--line);display:flex;gap:24px;margin-bottom:20px}.tabs button{border:0;background:transparent;color:var(--muted);font-weight:750;padding:12px 1px;border-bottom:3px solid transparent}.tabs button.active{color:var(--blue);border-color:var(--blue)}
+    .registration-list{display:grid;gap:14px}.registration{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;align-items:center;gap:17px}.reg-date{min-width:58px;border-radius:9px;background:#edf5fd;color:var(--blue);text-align:center;padding:9px;font-size:11px;font-weight:800;text-transform:uppercase}.reg-date b{display:block;font-size:20px;color:var(--navy)}.reg-main{flex:1}.reg-main h3{margin:0 0 4px;font-size:16px}.reg-main p{margin:0;color:var(--muted);font-size:13px}.status{font-size:12px;font-weight:800;padding:5px 9px;border-radius:20px;background:#e8f7ef;color:var(--green)}.status.past{background:#edf1f5;color:#63758a}.status.cancelled{background:#fff0f1;color:var(--red)}
+    .organizer-top{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:21px;border:1px solid var(--line);border-radius:12px;margin-bottom:20px}.organizer-top h2{margin:0 0 4px;font-size:22px}.organizer-top p{margin:0;color:var(--muted);font-size:14px}.manage-table{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:auto}.manage-row{min-width:720px;display:grid;grid-template-columns:2.1fr 1.1fr 1fr .7fr 180px;align-items:center;padding:15px 18px;border-bottom:1px solid #edf1f5;gap:12px;font-size:13px}.manage-row:last-child{border:0}.manage-row.head{background:#f8fafc;color:var(--muted);font-weight:800;font-size:12px;text-transform:uppercase}.manage-title{font-weight:750;font-size:14px}.manage-sub{color:var(--muted);font-size:12px;margin-top:3px}.actionset{display:flex;gap:5px}
+    .notice{padding:15px 17px;background:#fff8e5;border:1px solid #f3dc9d;border-radius:10px;color:#755617;margin-bottom:19px;font-size:14px}.notice a{color:var(--blue);font-weight:800;text-decoration:underline}
+    .modal-wrap{position:fixed;z-index:50;inset:0;background:rgba(13,30,53,.55);display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}.modal-wrap.show{display:flex}.modal{width:min(660px,100%);background:#fff;border-radius:16px;box-shadow:0 22px 70px rgba(0,0,0,.25);position:relative;max-height:calc(100vh - 40px);overflow:auto}.modal-large{width:min(780px,100%)}.close{position:absolute;right:14px;top:14px;width:32px;height:32px;border:0;border-radius:50%;background:#eff4f8;color:var(--ink);font-size:20px;z-index:2}.modal-cover{height:155px;background:linear-gradient(130deg,#1f6ab0,#173c6b);padding:25px;color:#fff}.modal-cover h2{font-size:27px;line-height:1.15;margin:30px 35px 0 0}.modal-content{padding:25px}.detail-meta{display:grid;grid-template-columns:1fr 1fr;gap:15px;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:18px}.detail-meta div{font-size:13px;color:var(--muted)}.detail-meta b{display:block;color:var(--ink);margin-bottom:3px}.description{color:#53677d;line-height:1.65;font-size:14px}.modal-footer{padding:17px 25px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}.form-modal h2{margin:0;padding:23px 25px;border-bottom:1px solid var(--line);font-size:22px}.form{padding:23px 25px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:750}.field label span{color:var(--red)}.error{font-size:12px;color:var(--red);min-height:15px}.form-actions{display:flex;justify-content:flex-end;gap:10px;padding:16px 25px;border-top:1px solid var(--line)}
+    #toast{position:fixed;right:20px;bottom:20px;z-index:100;background:var(--navy);color:#fff;border-radius:9px;padding:13px 16px;box-shadow:var(--shadow);font-size:14px;font-weight:650;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}#toast.show{opacity:1;transform:none}
+    @media(max-width:800px){.nav{height:auto;min-height:64px;padding:10px 15px;gap:10px;flex-wrap:wrap}.navlinks{order:3;height:36px;flex-basis:100%;gap:16px}.navlinks button{font-size:13px}.user-select{margin-left:auto;max-width:165px}.hero{padding:30px 25px}.hero h1{font-size:28px}.filters{grid-template-columns:1fr 1fr}.filters .input{grid-column:1/-1}.cards{grid-template-columns:1fr 1fr}.organizer-top{align-items:flex-start;gap:15px;flex-direction:column}.registration{align-items:flex-start;flex-wrap:wrap}.registration .btn{margin-left:75px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+    @media(max-width:510px){main{padding:21px 14px}.brand{font-size:17px}.brand-mark{width:29px;height:29px}.user-select{font-size:12px;padding:7px;max-width:135px}.cards{grid-template-columns:1fr}.filters{grid-template-columns:1fr}.filters .input{grid-column:auto}.detail-meta{grid-template-columns:1fr}.modal-footer{align-items:stretch;flex-direction:column}.modal-footer .btn{width:100%}.hero{margin-left:-2px;margin-right:-2px}.section-head{align-items:flex-start;flex-direction:column}.tabs{gap:15px}.tabs button{font-size:13px}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="#" onclick="go('events');return false"><span class="brand-mark">C</span>Campus Connect</a>
+    <div class="navlinks">
+      <button data-page="events" class="active" onclick="go('events')">Events</button>
+      <button data-page="registrations" onclick="go('registrations')">My Registrations</button>
+      <button data-page="organizer" id="organizerNav" onclick="go('organizer')">Organizer</button>
+    </div>
+    <select id="userSelect" class="user-select" aria-label="Switch account"></select>
+  </nav>
+
+  <main>
+    <section id="eventsPage" class="page active">
+      <div class="hero">
+        <h1>Discover what’s happening on campus</h1>
+        <p>Find events, connect with your community, and make the most of student life.</p>
+        <button class="btn primary" onclick="document.getElementById('browse').scrollIntoView({behavior:'smooth'})">Explore Events ↓</button>
+      </div>
+      <div id="browse" class="section-head"><div><h2>Campus Events</h2><p id="eventCount">Browse upcoming events hosted by campus organizations.</p></div></div>
+      <div class="filters">
+        <input class="input" id="searchFilter" placeholder="Search events, organizations, or locations..." oninput="renderEvents()" />
+        <select class="select" id="categoryFilter" onchange="renderEvents()"><option value="">All categories</option><option>Academic</option><option>Arts & Culture</option><option>Career</option><option>Social</option><option>Sports</option><option>Technology</option></select>
+        <select class="select" id="timeFilter" onchange="renderEvents()"><option value="upcoming">Upcoming events</option><option value="past">Past events</option><option value="all">All events</option></select>
+        <button class="btn outline" onclick="clearFilters()">Clear</button>
+      </div>
+      <div id="eventCards" class="cards"></div>
+    </section>
+
+    <section id="registrationsPage" class="page">
+      <div class="section-head"><div><h2>My Registrations</h2><p>Keep track of the events you’re attending.</p></div></div>
+      <div class="tabs"><button id="upcomingTab" class="active" onclick="setRegTab('upcoming')">Upcoming</button><button id="pastTab" onclick="setRegTab('past')">Past</button></div>
+      <div id="registrationList" class="registration-list"></div>
+    </section>
+
+    <section id="organizerPage" class="page">
+      <div id="organizerContent"></div>
+    </section>
+  </main>
+
+  <div id="modalWrap" class="modal-wrap" onclick="if(event.target===this)closeModal()"></div>
+  <div id="toast"></div>
+
+  <script>
+    const USERS = [
+      {id:'u1',name:'Maya Rodriguez',role:'student'},
+      {id:'u2',name:'Jordan Lee',role:'student'},
+      {id:'u3',name:'Alex Morgan — Organizer',role:'organizer'}
+    ];
+    const initialEvents = [
+      {id:'e1',title:'Spring Career & Internship Fair',organization:'Career Development Center',category:'Career',date:'2026-04-08',time:'11:00 AM – 3:00 PM',location:'Student Union Ballroom',capacity:180,registrations:['u1'],description:'Meet representatives from leading employers and explore internship, part-time, and full-time opportunities. Bring your student ID and a few copies of your résumé.'},
+      {id:'e2',title:'Hack the Hill: Innovation Weekend',organization:'Computer Science Society',category:'Technology',date:'2026-04-12',time:'9:00 AM',location:'Engineering Building, Room 210',capacity:75,registrations:['u2'],description:'A collaborative weekend of ideas, code, and creativity. Build something meaningful with fellow students, receive mentorship, and present your project to campus innovators.'},
+      {id:'e3',title:'Open Mic Night',organization:'Campus Arts Collective',category:'Arts & Culture',date:'2026-04-16',time:'7:00 PM – 9:30 PM',location:'The Commons Café',capacity:60,registrations:[],description:'Share your music, poetry, comedy, or storytelling in an encouraging campus community. Audience members and first-time performers are warmly welcome.'},
+      {id:'e4',title:'Wellness Walk & Coffee Chat',organization:'Student Wellness Office',category:'Social',date:'2026-04-21',time:'8:30 AM – 10:00 AM',location:'North Quad Fountain',capacity:35,registrations:['u1','u2'],description:'Take a mindful walk around campus, meet new people, and enjoy complimentary coffee. This easy-paced gathering is open to all students.'},
+      {id:'e5',title:'Intramural Soccer Tryouts',organization:'Campus Recreation',category:'Sports',date:'2026-03-18',time:'5:00 PM – 7:00 PM',location:'West Athletic Fields',capacity:80,registrations:['u1'],description:'Try out for this season’s intramural soccer league. Players of every experience level are invited to participate.'},
+      {id:'e6',title:'Research Poster Showcase',organization:'College of Sciences',category:'Academic',date:'2026-03-08',time:'2:00 PM – 4:00 PM',location:'Science Hall Atrium',capacity:120,registrations:[],description:'Explore student research projects from across the sciences and connect with faculty and undergraduate researchers.'}
+    ];
+    const STORE_KEY='campusConnectEventsV1', USER_KEY='campusConnectCurrentUserV1';
+    let events = JSON.parse(localStorage.getItem(STORE_KEY)||'null') || initialEvents;
+    let currentUserId = localStorage.getItem(USER_KEY)||'u1';
+    let regTab='upcoming';
+    const today = '2026-04-01';
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    const currentUser=()=>USERS.find(u=>u.id===currentUserId);
+    const save=()=>localStorage.setItem(STORE_KEY,JSON.stringify(events));
+    const isPast=e=>e.date<today;
+    const isCancelled=e=>!!e.cancelled;
+    const fmtDate = date => new Date(date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const pieces = date => {let d=new Date(date+'T12:00:00');return [d.toLocaleDateString('en-US',{month:'short'}),d.getDate()]}
+    function toast(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove('show'),3000)}
+    function initUsers(){
+      $('userSelect').innerHTML=USERS.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join('');
+      $('userSelect').value=currentUserId;
+      $('userSelect').onchange=e=>{currentUserId=e.target.value;localStorage.setItem(USER_KEY,currentUserId);renderAll();toast(`Switched to ${currentUser().name}`)}
+    }
+    function go(page){
+      if(page==='organizer'&&currentUser().role!=='organizer'){toast('Switch to an organizer account to manage events.');return}
+      document.querySelectorAll('.page').forEach(x=>x.classList.remove('active')); $(page+'Page').classList.add('active');
+      document.querySelectorAll('.navlinks button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
+      if(page==='registrations')renderRegistrations();if(page==='organizer')renderOrganizer();window.scrollTo({top:0,behavior:'smooth'});
+    }
+    function clearFilters(){$('searchFilter').value='';$('categoryFilter').value='';$('timeFilter').value='upcoming';renderEvents()}
+    function eventArt(e){return e.category==='Arts & Culture'?'art':e.category==='Technology'?'tech':e.category==='Sports'?'sport':''}
+    function renderEvents(){
+      let search=$('searchFilter').value.toLowerCase(), cat=$('categoryFilter').value, time=$('timeFilter').value;
+      let filtered=events.filter(e=>(time==='all'||(time==='past'?isPast(e):!isPast(e)))&&(!cat||e.category===cat)&&(!search||[e.title,e.organization,e.location,e.category].join(' ').toLowerCase().includes(search)));
+      $('eventCount').textContent=`${filtered.length} ${filtered.length===1?'event':'events'} ${time==='past'?'from the past':'to explore'}${search||cat?' matching your filters':''}.`;
+      $('eventCards').innerHTML=filtered.length?filtered.map(e=>{
+        let [mo,day]=pieces(e.date), seats=e.capacity-e.registrations.length, registered=e.registrations.includes(currentUserId);
+        return `<article class="card ${isCancelled(e)?'cancelled':''}"><div class="card-top ${eventArt(e)}"><div class="datebox">${mo}<strong>${day}</strong></div><span class="tag">${isCancelled(e)?'Cancelled':esc(e.category)}</span></div><div class="card-body"><h3>${esc(e.title)}</h3><div class="org">${esc(e.organization)}</div><div class="info"><span>◷ ${esc(e.time)} · ${fmtDate(e.date)}</span><span>⌖ ${esc(e.location)}</span></div><div class="card-bottom"><span class="seats ${seats<10?'low':''}">${isCancelled(e)?'No longer available':seats+' of '+e.capacity+' seats left'}</span><button class="btn ${registered?'secondary':'primary'} small" onclick="openDetail('${e.id}')">${registered?'Registered':'View Event'}</button></div></div></article>`
+      }).join(''):`<div class="empty"><strong>No events found</strong>Try adjusting your search or filters to discover more campus activities.</div>`;
+    }
+    function openDetail(id){
+      let e=events.find(x=>x.id===id), seats=e.capacity-e.registrations.length, registered=e.registrations.includes(currentUserId), past=isPast(e), unavailable=isCancelled(e)||past;
+      $('modalWrap').innerHTML=`<div class="modal"><button class="close" onclick="closeModal()" aria-label="Close">×</button><div class="modal-cover"><span class="tag">${isCancelled(e)?'Cancelled':esc(e.category)}</span><h2>${esc(e.title)}</h2></div><div class="modal-content"><div class="org">${esc(e.organization)}</div><div class="detail-meta"><div><b>Date & time</b>${fmtDate(e.date)}<br>${esc(e.time)}</div><div><b>Location</b>${esc(e.location)}</div><div><b>Availability</b>${isCancelled(e)?'This event has been cancelled':seats+' of '+e.capacity+' seats remaining'}</div><div><b>Hosted by</b>${esc(e.organization)}</div></div><h3>About this event</h3><p class="description">${esc(e.description)}</p></div><div class="modal-footer"><span class="seats">${registered?'You have reserved a seat.':unavailable?(past?'This event has ended.':'Registration is unavailable.'):seats===0?'This event is at capacity.':'Free for enrolled students'}</span>${registered&&!past&&!isCancelled(e)?`<button class="btn danger" onclick="cancelRegistration('${e.id}')">Cancel registration</button>`:!registered&&!unavailable&&seats>0?`<button class="btn primary" onclick="register('${e.id}')">Register for event</button>`:`<button class="btn outline" onclick="closeModal()">Close</button>`}</div></div>`;
+      $('modalWrap').classList.add('show');
+    }
+    function closeModal(){$('modalWrap').classList.remove('show');$('modalWrap').innerHTML=''}
+    function register(id){
+      let e=events.find(x=>x.id===id);
+      if(isCancelled(e)||isPast(e)){toast('Registration is no longer available for this event.');return}
+      if(e.registrations.includes(currentUserId)){toast('You are already registered for this event.');return}
+      if(e.registrations.length>=e.capacity){toast('Sorry, this event is at capacity.');return}
+      e.registrations.push(currentUserId);save();renderAll();openDetail(id);toast('You’re registered! Your seat has been reserved.');
+    }
+    function cancelRegistration(id){
+      let e=events.find(x=>x.id===id);e.registrations=e.registrations.filter(x=>x!==currentUserId);save();closeModal();renderAll();toast('Your registration has been cancelled.');
+    }
+    function setRegTab(t){regTab=t;$('upcomingTab').classList.toggle('active',t==='upcoming');$('pastTab').classList.toggle('active',t==='past');renderRegistrations()}
+    function renderRegistrations(){
+      let list=events.filter(e=>e.registrations.includes(currentUserId)&&(regTab==='past'?isPast(e):!isPast(e)));
+      $('registrationList').innerHTML=list.length?list.map(e=>{let [m,d]=pieces(e.date);return `<div class="registration"><div class="reg-date">${m}<b>${d}</b></div><div class="reg-main"><h3>${esc(e.title)}</h3><p>${fmtDate(e.date)} · ${esc(e.time)} &nbsp; | &nbsp; ${esc(e.location)}</p></div><span class="status ${isPast(e)?'past':isCancelled(e)?'cancelled':''}">${isCancelled(e)?'Cancelled':isPast(e)?'Completed':'Registered'}</span>${!isPast(e)&&!isCancelled(e)?`<button class="btn danger small" onclick="cancelRegistration('${e.id}')">Cancel</button>`:`<button class="btn outline small" onclick="openDetail('${e.id}')">View</button>`}</div>`}).join(''):`<div class="empty"><strong>No ${regTab} registrations</strong>${regTab==='upcoming'?'Browse campus events and reserve your next experience.':'Events you attended will appear here.'}<br>${regTab==='upcoming'?'<button class="btn primary small" style="margin-top:16px" onclick="go(\'events\')">Browse events</button>':''}</div>`;
+    }
+    function renderOrganizer(){
+      if(currentUser().role!=='organizer'){$('organizerContent').innerHTML=`<div class="notice">Organizer access is required. <a href="#" onclick="$('userSelect').value='u3';$('userSelect').dispatchEvent(new Event('change'));return false">Switch to Alex Morgan — Organizer</a></div>`;return}
+      $('organizerContent').innerHTML=`<div class="organizer-top"><div><h2>Manage Events</h2><p>Create, edit, cancel, or delete campus events.</p></div><button class="btn primary" onclick="openForm()">+ Create event</button></div><div class="manage-table"><div class="manage-row head"><div>Event</div><div>Date & Time</div><div>Registration</div><div>Status</div><div>Actions</div></div>${events.length?events.map(e=>`<div class="manage-row"><div><div class="manage-title">${esc(e.title)}</div><div class="manage-sub">${esc(e.organization)} · ${esc(e.location)}</div></div><div>${fmtDate(e.date)}<div class="manage-sub">${esc(e.time)}</div></div><div>${e.registrations.length} / ${e.capacity} seats</div><div><span class="status ${isCancelled(e)?'cancelled':''}">${isCancelled(e)?'Cancelled':'Active'}</span></div><div class="actionset"><button class="btn outline small" onclick="openForm('${e.id}')">Edit</button><button class="btn ${isCancelled(e)?'secondary':'danger'} small" onclick="toggleCancel('${e.id}')">${isCancelled(e)?'Restore':'Cancel'}</button><button class="btn danger small" onclick="deleteEvent('${e.id}')">Delete</button></div></div>`).join(''):`<div class="empty">No events created yet.</div>`}</div>`;
+    }
+    function toggleCancel(id){let e=events.find(x=>x.id===id);e.cancelled=!e.cancelled;save();renderAll();toast(e.cancelled?'Event cancelled. Registered students are now notified in their dashboard.':'Event restored and open for registration.')}
+    function deleteEvent(id){let e=events.find(x=>x.id===id);if(confirm(`Delete "${e.title}"? This cannot be undone.`)){events=events.filter(x=>x.id!==id);save();renderAll();toast('Event permanently deleted.');}}
+    function openForm(id){
+      let e=id?events.find(x=>x.id===id):{title:'',organization:'',category:'Academic',date:'',time:'',location:'',capacity:'',description:''};
+      $('modalWrap').innerHTML=`<div class="modal modal-large form-modal"><button class="close" onclick="closeModal()">×</button><h2>${id?'Edit event':'Create a new event'}</h2><form id="eventForm" novalidate><div class="form"><div class="form-grid">
+      <div class="field full"><label>Event title <span>*</span></label><input class="input" name="title" maxlength="100" value="${esc(e.title)}"><div class="error"></div></div>
+      <div class="field"><label>Hosting organization <span>*</span></label><input class="input" name="organization" maxlength="80" value="${esc(e.organization)}"><div class="error"></div></div>
+      <div class="field"><label>Category <span>*</span></label><select class="select" name="category">${['Academic','Arts & Culture','Career','Social','Sports','Technology'].map(x=>`<option ${x===e.category?'selected':''}>${x}</option>`).join('')}</select><div class="error"></div></div>
+      <div class="field"><label>Date <span>*</span></label><input class="input" type="date" name="date" value="${e.date}"><div class="error"></div></div>
+      <div class="field"><label>Time <span>*</span></label><input class="input" name="time" placeholder="e.g. 6:00 PM – 8:00 PM" maxlength="50" value="${esc(e.time)}"><div class="error"></div></div>
+      <div class="field full"><label>Location <span>*</span></label><input class="input" name="location" maxlength="100" value="${esc(e.location)}"><div class="error"></div></div>
+      <div class="field"><label>Capacity <span>*</span></label><input class="input" type="number" min="1" max="10000" name="capacity" value="${e.capacity}"><div class="error"></div></div>
+      <div class="field full"><label>Description <span>*</span></label><textarea rows="4" name="description" maxlength="1000">${esc(e.description)}</textarea><div class="error"></div></div>
+      </div></div><div class="form-actions"><button type="button" class="btn outline" onclick="closeModal()">Cancel</button><button type="submit" class="btn primary">${id?'Save changes':'Create event'}</button></div></form></div>`;
+      $('modalWrap').classList.add('show');
+      $('eventForm').onsubmit=ev=>submitForm(ev,id);
+    }
+    function submitForm(ev,id){
+      ev.preventDefault();let f=ev.target, data=Object.fromEntries(new FormData(f)), valid=true;
+      f.querySelectorAll('.error').forEach(x=>x.textContent='');
+      const error=(name,msg)=>{f.elements[name].parentElement.querySelector('.error').textContent=msg;valid=false}
+      ['title','organization','date','time','location','description'].forEach(n=>{if(!String(data[n]).trim())error(n,'This field is required.')});
+      let cap=Number(data.capacity);if(!Number.isInteger(cap)||cap<1||cap>10000)error('capacity','Enter a capacity between 1 and 10,000.');
+      if(data.date&&data.date<today)error('date','Event date must be April 1, 2026 or later.');
+      if(id){let old=events.find(x=>x.id===id);if(cap<old.registrations.length)error('capacity',`Capacity cannot be lower than ${old.registrations.length} existing registrations.`)}
+      if(!valid)return;
+      if(id){let old=events.find(x=>x.id===id);Object.assign(old,{...data,capacity:cap});toast('Event changes saved.')}
+      else {events.unshift({id:'e'+Date.now(),...data,capacity:cap,registrations:[],cancelled:false});toast('New event created and published.')}
+      save();closeModal();renderAll();
+    }
+    function renderAll(){renderEvents();renderRegistrations();renderOrganizer()}
+    initUsers();renderAll();
+  </script>
+</body>
+</html>
